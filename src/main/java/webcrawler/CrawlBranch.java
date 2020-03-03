@@ -39,7 +39,7 @@ public class CrawlBranch {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("ERROR -- error in out http request : " + e);
+            //System.out.println("ERROR -- error in out http request : " + e);
             return false;
         }
     }
@@ -51,7 +51,7 @@ public class CrawlBranch {
      */
     public int searchForWord(String word) {
         if (this.htmlDocument == null){
-            System.out.println("ERROR -- call crawl before searhing");
+            //System.out.println("ERROR -- call crawl before searhing");
             return -1;
         }
         System.out.printf("Searching for %s...", word);
