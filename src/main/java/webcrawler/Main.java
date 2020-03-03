@@ -13,11 +13,15 @@ public class Main {
         int amount = Integer.parseInt(scanner.nextLine().trim());
         System.out.print("Should the crawler save the links with hits? (Y/N) : ");
         String choice = scanner.nextLine().toLowerCase().trim();
-        boolean save;
-        if (choice.equals("y")) save = true;
-        else if (choice.equals("n")) save = false;
-        else save = false;
+        boolean save = getChoice(choice);
+
+        System.out.print("Do you want to enable debug mode? (Y/N) : ");
         WebCrawler crawler = new WebCrawler(amount,save);
         crawler.search(startUrl,word);
+    }
+
+    private static boolean getChoice(String choice) {
+        if (choice.trim().toLowerCase().equals("y")) return true;
+        else return false;
     }
 }

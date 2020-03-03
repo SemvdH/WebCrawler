@@ -11,6 +11,7 @@ public class WebCrawler {
     private int amountFound = 0;
     private int successPages = 0;
     private boolean shouldSaveHitLinks;
+    private boolean debug;
 
     /**
      * creates a new WebCrawler object with standard values
@@ -33,12 +34,17 @@ public class WebCrawler {
      * @param shouldSaveHitLinks if the crawler should save the links that have one or more hits
      */
     public WebCrawler(int maxPages, boolean shouldSaveHitLinks) {
+        this(maxPages,shouldSaveHitLinks,false);
+    }
+
+    public WebCrawler(int maxPages, boolean shouldSaveHitLinks, boolean debug) {
         this.amountOfPages = maxPages;
         this.shouldSaveHitLinks = shouldSaveHitLinks;
         this.pagesVisited = new HashSet<>();
         this.pagesPending = new LinkedList<>();
         this.resultPages = new ArrayList<>();
         this.urlHits = new HashMap<>();
+        this.debug = debug;
     }
 
 
@@ -130,6 +136,14 @@ public class WebCrawler {
 
     public int getAmountFound() {
         return amountFound;
+    }
+
+    public boolean usesDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     /**
