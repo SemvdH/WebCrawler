@@ -13,10 +13,20 @@ import java.util.List;
 public class CrawlBranch {
     private List<String> links = new LinkedList<>();
     private Document htmlDocument;
+    private boolean debug;
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
+
+    public CrawlBranch() {
+        this(false);
+    }
+
+    public CrawlBranch(boolean debug) {
+        this.debug = debug;
+    }
 
     /**
      * crawls the links in it's current arrayList of links
+     *
      * @param url the url to start from
      * @return <code>true</code> if the search was successful, <code>false otherwise</code>
      */
@@ -26,14 +36,14 @@ public class CrawlBranch {
             this.htmlDocument = connection.get();
 
             if (connection.response().statusCode() == 200) {
-                System.out.println("VISITING -- Recieved web page at " + url);
+                print("VISITING -- Recieved web page at " + url);
             } else {
-                System.out.println("FAIL -- recieved something else than a web page");
+                print("FAIL -- recieved something else than a web page");
                 return false;
             }
 
             Elements linksOnPage = htmlDocument.select("a[href]");
-            System.out.println("FOUND (" + linksOnPage.size() + ") links");
+            print("FOUND (" + linksOnPage.size() + ") links");
             for (Element link : linksOnPage) {
                 this.links.add(link.absUrl("href"));
             }
@@ -46,22 +56,23 @@ public class CrawlBranch {
 
     /**
      * searches how many times a word occurs in a page
+     *
      * @param word the word to look for
      * @return the amount of occurrences in the web page, -1 if the word is not found
      */
     public int searchForWord(String word) {
-        if (this.htmlDocument == null){
+        if (this.htmlDocument == null) {
             //System.out.println("ERROR -- call crawl before searhing");
             return -1;
         }
-        System.out.printf("Searching for %s...", word);
-        System.out.println();
+        print(String.format("Searching for %s...\n", word));
         String bodyText = this.htmlDocument.body().text();
-        return count(bodyText.toLowerCase(),word.toLowerCase());
+        return count(bodyText.toLowerCase(), word.toLowerCase());
     }
 
     /**
      * counts how many times a word occurs in a string
+     *
      * @param text the string to search in for the word
      * @param word the word to search for
      * @return the amount of times the given word was found in the string
@@ -77,9 +88,14 @@ public class CrawlBranch {
 
     /**
      * gets the links
+     *
      * @return the links
      */
     public List<String> getLinks() {
         return this.links;
+    }
+
+    private void print(String text) {
+        if (debug) System.out.println(text);
     }
 }

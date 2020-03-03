@@ -12,11 +12,10 @@ public class Main {
         System.out.print("Enter the maximum amount of pages the crawler should visit : ");
         int amount = Integer.parseInt(scanner.nextLine().trim());
         System.out.print("Should the crawler save the links with hits? (Y/N) : ");
-        String choice = scanner.nextLine().toLowerCase().trim();
-        boolean save = getChoice(choice);
-
+        boolean save = getChoice(scanner.nextLine());
         System.out.print("Do you want to enable debug mode? (Y/N) : ");
-        WebCrawler crawler = new WebCrawler(amount,save);
+        boolean debug = getChoice(scanner.nextLine());
+        WebCrawler crawler = new WebCrawler(amount,save,debug);
         crawler.search(startUrl,word);
     }
 

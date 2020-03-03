@@ -7,7 +7,7 @@ public class WebCrawler {
     private Set<String> pagesVisited;
     private List<String> pagesPending;
     private ArrayList<String> resultPages;
-    private Map<String,Integer> urlHits;
+    private Map<String, Integer> urlHits;
     private int amountFound = 0;
     private int successPages = 0;
     private boolean shouldSaveHitLinks;
@@ -22,6 +22,7 @@ public class WebCrawler {
 
     /**
      * creates a new WebCrawler object with the given amount of max pages
+     *
      * @param maxPages the max amount of pages the crawler should visit
      */
     public WebCrawler(int maxPages) {
@@ -30,11 +31,12 @@ public class WebCrawler {
 
     /**
      * creates a new WebCrawler object with the given amount of max pages, and if it should save the hit URLs
-     * @param maxPages the max amount of pages the crawler should visit
+     *
+     * @param maxPages           the max amount of pages the crawler should visit
      * @param shouldSaveHitLinks if the crawler should save the links that have one or more hits
      */
     public WebCrawler(int maxPages, boolean shouldSaveHitLinks) {
-        this(maxPages,shouldSaveHitLinks,false);
+        this(maxPages, shouldSaveHitLinks, false);
     }
 
     public WebCrawler(int maxPages, boolean shouldSaveHitLinks, boolean debug) {
@@ -50,6 +52,7 @@ public class WebCrawler {
 
     /**
      * gets the next url in the list
+     *
      * @return the next url in the list
      */
     private String nextUrl() {
@@ -63,10 +66,12 @@ public class WebCrawler {
 
     /**
      * searches for a word by crawling the web through hyperlinks
-     * @param url the url to start searching from
+     *
+     * @param url        the url to start searching from
      * @param searchWord the word to search for
      */
     public void search(String url, String searchWord) {
+        int counter = 1;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
             CrawlBranch branch = new CrawlBranch();
@@ -75,18 +80,19 @@ public class WebCrawler {
                 this.pagesVisited.add(url);
             } else {
                 curUrl = this.nextUrl();
+                System.out.println(String.format("visiting page %s / %s",counter,amountOfPages));
+                counter++;
             }
             branch.crawl(curUrl);
 
             int amount = branch.searchForWord(searchWord);
             if (amount > 0) {
-                System.out.printf("SUCCESS -- word %s found at %s %s times", searchWord, curUrl, amount);
-                System.out.println();
+                print(String.format("SUCCESS -- word %s found at %s %s times\n", searchWord, curUrl, amount));
                 successPages++;
                 amountFound += amount;
                 if (shouldSaveHitLinks)
-                resultPages.add(curUrl);
-                urlHits.put(curUrl,amount);
+                    resultPages.add(curUrl);
+                urlHits.put(curUrl, amount);
             }
             this.pagesPending.addAll(branch.getLinks());
         }
@@ -116,6 +122,7 @@ public class WebCrawler {
 
     /**
      * sets the amount of max pages
+     *
      * @param amount the amount of pages
      */
     public void setAmountOfPages(int amount) {
@@ -156,5 +163,9 @@ public class WebCrawler {
         this.pagesVisited.clear();
         this.successPages = 0;
         this.amountFound = 0;
+    }
+
+    private void print(String text) {
+        if (debug) System.out.println(text);
     }
 }
