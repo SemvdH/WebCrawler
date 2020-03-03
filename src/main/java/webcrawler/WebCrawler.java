@@ -74,7 +74,7 @@ public class WebCrawler {
         int counter = 0;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
-            CrawlBranch branch = new CrawlBranch();
+            CrawlBranch branch = new CrawlBranch(debug);
             if (this.pagesPending.isEmpty()) {
                 curUrl = url;
                 this.pagesVisited.add(url);

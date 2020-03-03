@@ -15,6 +15,7 @@ public class Main {
         boolean save = getChoice(scanner.nextLine());
         System.out.print("Do you want to enable debug mode? (Y/N) : ");
         boolean debug = getChoice(scanner.nextLine());
+        if (debug) System.out.println("[INFO] - Debug mode enabled");
         WebCrawler crawler = new WebCrawler(amount,save,debug);
         crawler.search(startUrl,word);
     }
