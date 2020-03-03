@@ -71,7 +71,7 @@ public class WebCrawler {
      * @param searchWord the word to search for
      */
     public void search(String url, String searchWord) {
-        int counter = 1;
+        int counter = 0;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
             CrawlBranch branch = new CrawlBranch();
@@ -80,8 +80,8 @@ public class WebCrawler {
                 this.pagesVisited.add(url);
             } else {
                 curUrl = this.nextUrl();
-                System.out.println(String.format("visiting page %s / %s",counter,amountOfPages));
                 counter++;
+                System.out.println(String.format("visiting page %s / %s",counter,amountOfPages));
             }
             branch.crawl(curUrl);
 
