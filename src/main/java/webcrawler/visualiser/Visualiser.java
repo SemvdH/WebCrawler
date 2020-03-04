@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.webcrawler.crawler.CrawlThread;
+import main.java.webcrawler.crawler.WebCrawler;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
@@ -27,12 +28,14 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Visualiser extends Application {
     private double frameTime = 0;
     private BorderPane pane;
     private ResizableCanvas canvas;
     private ListView<String> log;
+    private CrawlThread thread;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -96,7 +99,7 @@ public class Visualiser extends Application {
         Button button = new Button("Run");
         button.setOnAction(e -> {
             log.getItems().clear();
-            CrawlThread thread = new CrawlThread(Integer.parseInt(amountField.getText()), true, urlField.getText(), wordField.getText(), this);
+            thread = new CrawlThread(Integer.parseInt(amountField.getText()), true, urlField.getText(), wordField.getText(), this);
             thread.start();
         });
 
@@ -141,6 +144,19 @@ public class Visualiser extends Application {
         if (this.frameTime > 1d / 60d) {
             updateFrame();
             this.frameTime = 0d;
+        }
+
+        if (thread != null && thread.isAlive()) {
+            WebCrawler crawler = thread.getCrawler();
+            if (crawler != null) {
+                List<String> msgs = crawler.getMessages();
+                if (msgs != null)
+                    if (!msgs.isEmpty()) {
+                        log.getItems().addAll(msgs);
+                        thread.getCrawler().clearMessages();
+                    }
+            }
+
         }
     }
 

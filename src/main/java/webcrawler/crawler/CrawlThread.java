@@ -2,6 +2,8 @@ package main.java.webcrawler.crawler;
 
 import main.java.webcrawler.visualiser.Visualiser;
 
+import java.util.LinkedList;
+
 public class CrawlThread extends Thread {
 
     private final int amount;
@@ -44,4 +46,10 @@ public class CrawlThread extends Thread {
     public String getWord() {
         return word;
     }
+
+    public LinkedList<String> retrieveLog() {
+        return this.crawler.getMessages();
+    }
+
+
 }

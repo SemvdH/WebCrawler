@@ -18,13 +18,16 @@ public class CrawlBranch {
     private boolean debug;
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
+    private WebCrawler parent;
+
     public CrawlBranch() {
-        this(false,null);
+        this(false,null,null);
     }
 
-    public CrawlBranch(boolean debug, Visualiser logger) {
+    public CrawlBranch(boolean debug, WebCrawler parent,Visualiser logger) {
         this.debug = debug;
         this.logger = logger;
+        this.parent = parent;
     }
 
     /**
@@ -39,14 +42,17 @@ public class CrawlBranch {
             this.htmlDocument = connection.get();
 
             if (connection.response().statusCode() == 200) {
-                print("VISITING -- Recieved web page at " + url);
+//                print("VISITING -- Recieved web page at " + url);
+                sendMessage("VISITING -- Recieved web page at " + url);
             } else {
-                print("FAIL -- recieved something else than a web page");
+//                print("FAIL -- recieved something else than a web page");
+                sendMessage("FAIL -- recieved something else than a web page");
                 return false;
             }
 
             Elements linksOnPage = htmlDocument.select("a[href]");
-            print("FOUND (" + linksOnPage.size() + ") links");
+//            print("FOUND (" + linksOnPage.size() + ") links");
+            sendMessage("FOUND (" + linksOnPage.size() + ") links");
             for (Element link : linksOnPage) {
                 this.links.add(link.absUrl("href"));
             }
@@ -68,7 +74,8 @@ public class CrawlBranch {
             //System.out.println("ERROR -- call crawl before searhing");
             return -1;
         }
-        print(String.format("Searching for %s...", word));
+//        print(String.format("Searching for %s...", word));
+        sendMessage(String.format("Searching for %s...", word));
         String bodyText = this.htmlDocument.body().text();
         return count(bodyText.toLowerCase(), word.toLowerCase());
     }
@@ -100,5 +107,9 @@ public class CrawlBranch {
 
     private void print(String text) {
         if (debug) logger.log(text);
+    }
+
+    private void sendMessage(String message) {
+        this.parent.addMessage(message);
     }
 }

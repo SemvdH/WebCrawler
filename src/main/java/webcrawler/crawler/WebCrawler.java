@@ -17,6 +17,8 @@ public class WebCrawler {
     private boolean shouldSaveHitLinks;
     private boolean debug;
 
+    private LinkedList<String> messages;
+
     /**
      * creates a new WebCrawler object with standard values
      */
@@ -52,6 +54,7 @@ public class WebCrawler {
         this.urlHits = new HashMap<>();
         this.debug = debug;
         this.logger = logger;
+        this.messages = new LinkedList<>();
     }
 
 
@@ -79,20 +82,22 @@ public class WebCrawler {
         int counter = 0;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
-            CrawlBranch branch = new CrawlBranch(debug,logger);
+            CrawlBranch branch = new CrawlBranch(debug, this, logger);
             if (this.pagesPending.isEmpty()) {
                 curUrl = url;
                 this.pagesVisited.add(url);
             } else {
                 curUrl = this.nextUrl();
                 counter++;
-                print(String.format("visiting page %s / %s",counter,amountOfPages));
+//                print(String.format("visiting page %s / %s",counter,amountOfPages));
+                addMessage(String.format("visiting page %s / %s", counter, amountOfPages));
             }
             branch.crawl(curUrl);
 
             int amount = branch.searchForWord(searchWord);
             if (amount > 0) {
-                print(String.format("SUCCESS -- word %s found at %s %s times\n", searchWord, curUrl, amount));
+//                print(String.format("SUCCESS -- word %s found at %s %s times\n", searchWord, curUrl, amount));
+                addMessage(String.format("SUCCESS -- word %s found at %s %s times\n", searchWord, curUrl, amount));
                 successPages++;
                 amountFound += amount;
                 if (shouldSaveHitLinks)
@@ -101,10 +106,13 @@ public class WebCrawler {
             }
             this.pagesPending.addAll(branch.getLinks());
         }
-        print("========================");
-       print(String.format("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages));
+//        print("========================");
+        addMessage("========================");
+//        print(String.format("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages));
+        addMessage(String.format("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages));
         if (shouldSaveHitLinks) {
-            print(String.format("Successful pages: \n%s", showCombinations(urlHits)));
+//            print(String.format("Successful pages: \n%s", showCombinations(urlHits)));
+            addMessage(String.format("Successful pages: \n%s", showCombinations(urlHits)));
         }
     }
 
@@ -172,5 +180,18 @@ public class WebCrawler {
 
     private void print(String text) {
         if (debug) logger.log(text);
+    }
+
+    public void addMessage(String message) {
+        this.messages.add(message);
+//        System.out.println(message);
+    }
+
+    public LinkedList<String> getMessages() {
+        return this.messages;
+    }
+
+    public void clearMessages() {
+        this.messages.clear();
     }
 }
