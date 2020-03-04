@@ -37,6 +37,8 @@ public class Visualiser extends Application {
     private ListView<String> log;
     private CrawlThread thread;
 
+    //TODO make listview always scroll to bottom
+    //TODO implement visualisation
     @Override
     public void start(Stage primaryStage) throws Exception {
         new Visualiser();
