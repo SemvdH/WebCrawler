@@ -2,6 +2,8 @@ package main.java.webcrawler.visualiser;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -68,6 +70,7 @@ public class Visualiser extends Application {
         TextField wordField = new TextField();
         wordField.setPromptText("Enter the word to search for");
         TextField amountField = new TextField();
+        makeNumeric(amountField);
         amountField.setPromptText("Maximum amount of pages the crawler should visit..");
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER_LEFT);
@@ -78,7 +81,7 @@ public class Visualiser extends Application {
                 urlField,
                 new Label("Word to search for:"),
                 wordField,
-                new Label("Maximum amount of pages the crawler should visit:"),
+                new Label("Maximum amount of pages:"),
                 amountField);
         top.getChildren().add(content);
 
@@ -88,6 +91,19 @@ public class Visualiser extends Application {
         top.getChildren().add(debugWindow);
 
 
+    }
+
+    private void makeNumeric(TextField textField) {
+        // force the field to be numeric only
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 
     public void draw(FXGraphics2D graphics) {
