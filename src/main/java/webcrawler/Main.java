@@ -1,5 +1,7 @@
 package main.java.webcrawler;
 
+import javafx.application.Application;
+
 import java.util.Scanner;
 
 public class Main {
@@ -17,6 +19,7 @@ public class Main {
         boolean debug = getChoice(scanner.nextLine());
         if (debug) System.out.println("[INFO] - Debug mode enabled");
         WebCrawler crawler = new WebCrawler(amount,save,debug);
+        Application.launch(Visualiser.class);
         crawler.search(startUrl,word);
     }
 

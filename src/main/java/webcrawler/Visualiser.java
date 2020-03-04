@@ -6,8 +6,10 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
+import org.jfree.fx.ResizableCanvas;
 
 public class Visualiser extends Application {
     private Stage stage;
@@ -15,12 +17,16 @@ public class Visualiser extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.stage = stage;
-        Canvas canvas = new Canvas(1920, 1080);
+        BorderPane pane = new BorderPane();
+        this.stage = primaryStage;
+        ResizableCanvas canvas = new ResizableCanvas(this::draw, pane);
+        canvas.setWidth(1600);
+        canvas.setHeight(800);
+        pane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
         draw(g2d);
-        stage.setScene(new Scene(new Group(canvas)));
-        stage.setTitle("Hello Animation");
+        stage.setScene(new Scene(pane));
+        stage.setTitle("Webcrawler results");
         primaryStage.show();
 
         new AnimationTimer() {
