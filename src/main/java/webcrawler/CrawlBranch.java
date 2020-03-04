@@ -65,7 +65,7 @@ public class CrawlBranch {
             //System.out.println("ERROR -- call crawl before searhing");
             return -1;
         }
-        print(String.format("Searching for %s...\n", word));
+        print(String.format("Searching for %s...", word));
         String bodyText = this.htmlDocument.body().text();
         return count(bodyText.toLowerCase(), word.toLowerCase());
     }
