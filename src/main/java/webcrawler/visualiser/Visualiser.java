@@ -10,6 +10,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -17,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.java.webcrawler.crawler.CrawlThread;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
@@ -63,7 +65,7 @@ public class Visualiser extends Application {
     }
 
     private void initGUIElements() {
-        HBox top = new HBox(200);
+        HBox top = new HBox(100);
         top.getStyleClass().add("content");
         top.setPadding(new Insets(10, 10, 10, 10));
         top.setPrefWidth(canvas.getWidth());
@@ -91,7 +93,14 @@ public class Visualiser extends Application {
                 new Label("Maximum amount of pages:"),
                 amountField);
         top.getChildren().add(content);
+        Button button = new Button("Run");
+        button.setOnAction(e -> {
+            log.getItems().clear();
+            CrawlThread thread = new CrawlThread(Integer.parseInt(amountField.getText()), true, urlField.getText(), wordField.getText(), this);
+            thread.start();
+        });
 
+        top.getChildren().add(button);
         log = new ListView<>();
         log.setMinWidth(1100);
         top.setAlignment(Pos.CENTER_LEFT);
@@ -136,6 +145,10 @@ public class Visualiser extends Application {
     }
 
     public void log(String item) {
-        this.log.getItems().add(item);
+        try {
+            this.log.getItems().add(item);
+        } catch (Exception e) {
+            System.out.println("exception caught");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package main.java.webcrawler.crawler;
 
+import main.java.webcrawler.visualiser.Visualiser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,17 +12,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CrawlBranch {
+    private final Visualiser logger;
     private List<String> links = new LinkedList<>();
     private Document htmlDocument;
     private boolean debug;
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
     public CrawlBranch() {
-        this(false);
+        this(false,null);
     }
 
-    public CrawlBranch(boolean debug) {
+    public CrawlBranch(boolean debug, Visualiser logger) {
         this.debug = debug;
+        this.logger = logger;
     }
 
     /**
@@ -96,6 +99,6 @@ public class CrawlBranch {
     }
 
     private void print(String text) {
-        if (debug) System.out.println(text);
+        if (debug) logger.log(text);
     }
 }

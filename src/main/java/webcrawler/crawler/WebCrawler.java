@@ -1,6 +1,7 @@
 package main.java.webcrawler.crawler;
 
 import main.java.webcrawler.crawler.CrawlBranch;
+import main.java.webcrawler.visualiser.Visualiser;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ public class WebCrawler {
     private List<String> pagesPending;
     private ArrayList<String> resultPages;
     private Map<String, Integer> urlHits;
+    private Visualiser logger;
     private int amountFound = 0;
     private int successPages = 0;
     private boolean shouldSaveHitLinks;
@@ -38,10 +40,10 @@ public class WebCrawler {
      * @param shouldSaveHitLinks if the crawler should save the links that have one or more hits
      */
     public WebCrawler(int maxPages, boolean shouldSaveHitLinks) {
-        this(maxPages, shouldSaveHitLinks, false);
+        this(maxPages, shouldSaveHitLinks, false, null);
     }
 
-    public WebCrawler(int maxPages, boolean shouldSaveHitLinks, boolean debug) {
+    public WebCrawler(int maxPages, boolean shouldSaveHitLinks, boolean debug, Visualiser logger) {
         this.amountOfPages = maxPages;
         this.shouldSaveHitLinks = shouldSaveHitLinks;
         this.pagesVisited = new HashSet<>();
@@ -49,6 +51,7 @@ public class WebCrawler {
         this.resultPages = new ArrayList<>();
         this.urlHits = new HashMap<>();
         this.debug = debug;
+        this.logger = logger;
     }
 
 
@@ -76,14 +79,14 @@ public class WebCrawler {
         int counter = 0;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
-            CrawlBranch branch = new CrawlBranch(debug);
+            CrawlBranch branch = new CrawlBranch(debug,logger);
             if (this.pagesPending.isEmpty()) {
                 curUrl = url;
                 this.pagesVisited.add(url);
             } else {
                 curUrl = this.nextUrl();
                 counter++;
-                System.out.println(String.format("visiting page %s / %s",counter,amountOfPages));
+                print(String.format("visiting page %s / %s",counter,amountOfPages));
             }
             branch.crawl(curUrl);
 
@@ -98,10 +101,10 @@ public class WebCrawler {
             }
             this.pagesPending.addAll(branch.getLinks());
         }
-        System.out.println("========================");
-        System.out.printf("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages);
+        print("========================");
+       print(String.format("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages));
         if (shouldSaveHitLinks) {
-            System.out.printf("Successful pages: \n%s", showCombinations(urlHits));
+            print(String.format("Successful pages: \n%s", showCombinations(urlHits)));
         }
     }
 
@@ -168,6 +171,6 @@ public class WebCrawler {
     }
 
     private void print(String text) {
-        if (debug) System.out.println(text);
+        if (debug) logger.log(text);
     }
 }
