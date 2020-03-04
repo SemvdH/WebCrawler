@@ -1,13 +1,14 @@
 package main.java.webcrawler;
 
 import javafx.application.Application;
+import main.java.webcrawler.crawler.CrawlThread;
 import main.java.webcrawler.crawler.WebCrawler;
 import main.java.webcrawler.visualiser.Visualiser;
 
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter a starting URL : ");
         String startUrl = scanner.nextLine().trim();
@@ -20,9 +21,10 @@ public class Main {
         System.out.print("Do you want to enable debug mode? (Y/N) : ");
         boolean debug = getChoice(scanner.nextLine());
         if (debug) System.out.println("[INFO] - Debug mode enabled");
-        WebCrawler crawler = new WebCrawler(amount,save,debug);
-        Application.launch(Visualiser.class);
-        crawler.search(startUrl,word);
+//        Application.launch(Visualiser.class);
+        CrawlThread t = new CrawlThread(amount,save,debug,startUrl,word);
+        t.start();
+        System.out.println(t.getCrawler().getResultPages());
     }
 
     private static boolean getChoice(String choice) {

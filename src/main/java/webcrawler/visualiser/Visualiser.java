@@ -12,21 +12,19 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 public class Visualiser extends Application {
-    private Stage stage;
     private double frameTime = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         BorderPane pane = new BorderPane();
-        this.stage = primaryStage;
         ResizableCanvas canvas = new ResizableCanvas(this::draw, pane);
         canvas.setWidth(1600);
         canvas.setHeight(800);
         pane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
         draw(g2d);
-        stage.setScene(new Scene(pane));
-        stage.setTitle("Webcrawler results");
+        primaryStage.setScene(new Scene(pane));
+        primaryStage.setTitle("Webcrawler results");
         primaryStage.show();
 
         new AnimationTimer() {
