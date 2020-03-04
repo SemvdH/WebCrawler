@@ -4,6 +4,7 @@
     -fx-border-style: solid;
     -fx-border-width: 0.5px;
     -fx-border-color: #9cb8ae;
+    -fx-font-size: 16px;
 }
 
 .label {
@@ -25,4 +26,5 @@
 .list-cell {
     -fx-background-color: black;
     -fx-text-fill: #00d60e;
+    -fx-font-size: 14px;
 }

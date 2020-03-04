@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,20 +23,25 @@ import org.jfree.fx.ResizableCanvas;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Visualiser extends Application {
     private double frameTime = 0;
     private BorderPane pane;
     private ResizableCanvas canvas;
+    private ListView<String> log;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        new Visualiser();
         pane = new BorderPane();
         canvas = new ResizableCanvas(this::draw, pane);
         canvas.setWidth(1600);
         canvas.setHeight(800);
         pane.setCenter(canvas);
         initGUIElements();
+        log("debug");
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
         draw(g2d);
         primaryStage.setScene(new Scene(pane));
@@ -72,7 +79,7 @@ public class Visualiser extends Application {
         TextField amountField = new TextField();
         makeNumeric(amountField);
         amountField.setPromptText("Maximum amount of pages the crawler should visit..");
-        VBox content = new VBox(10);
+        VBox content = new VBox(5);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setMinWidth(400);
         content.setPadding(new Insets(0, 0, 0, 100));
@@ -85,10 +92,10 @@ public class Visualiser extends Application {
                 amountField);
         top.getChildren().add(content);
 
-        ListView<String> debugWindow = new ListView<>();
-        debugWindow.setMinWidth(1100);
+        log = new ListView<>();
+        log.setMinWidth(1100);
         top.setAlignment(Pos.CENTER_LEFT);
-        top.getChildren().add(debugWindow);
+        top.getChildren().add(log);
 
 
     }
@@ -126,5 +133,9 @@ public class Visualiser extends Application {
             updateFrame();
             this.frameTime = 0d;
         }
+    }
+
+    public void log(String item) {
+        this.log.getItems().add(item);
     }
 }
