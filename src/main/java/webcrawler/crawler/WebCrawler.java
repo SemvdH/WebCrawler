@@ -1,4 +1,6 @@
-package main.java.webcrawler;
+package main.java.webcrawler.crawler;
+
+import main.java.webcrawler.crawler.CrawlBranch;
 
 import java.util.*;
 

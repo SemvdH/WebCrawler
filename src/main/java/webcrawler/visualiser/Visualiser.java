@@ -1,4 +1,4 @@
-package main.java.webcrawler;
+package main.java.webcrawler.visualiser;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

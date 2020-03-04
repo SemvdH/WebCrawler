@@ -1,6 +1,8 @@
 package main.java.webcrawler;
 
 import javafx.application.Application;
+import main.java.webcrawler.crawler.WebCrawler;
+import main.java.webcrawler.visualiser.Visualiser;
 
 import java.util.Scanner;
 
