@@ -7,6 +7,10 @@
     -fx-font-size: 16px;
 }
 
+.button {
+    -fx-background-color: ;
+}
+
 .label {
     -fx-text-fill: #13e89a;
 }

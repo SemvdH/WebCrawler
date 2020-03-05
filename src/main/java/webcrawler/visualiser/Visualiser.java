@@ -131,8 +131,8 @@ public class Visualiser extends Application {
         graphics.setBackground(new Color(43, 43, 46));
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
-        graphics.setColor(Color.red);
-        graphics.draw(new Rectangle2D.Double(10, 10, 500, 500));
+//        graphics.setColor(Color.red);
+//        graphics.draw(new Rectangle2D.Double(10, 10, 500, 500));
     }
 
 
