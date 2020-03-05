@@ -117,3 +117,4 @@ fabric.properties
 .idea/artifacts/WebCrawler_jar.xml
 .idea/modules.xml
 .idea/misc.xml
+.idea/**
