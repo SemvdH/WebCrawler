@@ -118,3 +118,5 @@ fabric.properties
 .idea/modules.xml
 .idea/misc.xml
 .idea/**
+# Keep lib folder
+!lib/
