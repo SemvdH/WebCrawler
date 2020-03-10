@@ -37,6 +37,8 @@ public class Visualiser extends Application {
     private ListView<String> log;
     private CrawlThread thread;
 
+    private int lastLogSize = 0;
+
     //TODO make listview always scroll to bottom
     //TODO implement visualisation
     @Override
@@ -156,6 +158,11 @@ public class Visualiser extends Application {
                     if (!msgs.isEmpty()) {
                         log.getItems().addAll(msgs);
                         thread.getCrawler().clearMessages();
+                        if (log.getItems().size() > lastLogSize) {
+                            if (!log.getItems().isEmpty())
+                                log.scrollTo(log.getItems().size() - 1);
+                            lastLogSize = log.getItems().size();
+                        }
                     }
             }
 
