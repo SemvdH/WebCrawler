@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class CrawlThread extends Thread {
 
     private final int amount;
-    private final boolean debug;
+    private boolean debug;
     private final String startUrl;
     private final String word;
     private WebCrawler crawler;
@@ -19,11 +19,13 @@ public class CrawlThread extends Thread {
         this.startUrl = startUrl;
         this.word = word;
         this.visualiser = visualiser;
+        this.crawler = new WebCrawler(amount, true, debug, visualiser);
 
     }
 
     public void run() {
-        this.crawler = new WebCrawler(amount, true, debug,visualiser);
+//        this.debug = false;
+        System.out.println("starting thread");
         this.crawler.search(startUrl, word);
     }
 

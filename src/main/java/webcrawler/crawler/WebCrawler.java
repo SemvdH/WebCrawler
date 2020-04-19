@@ -16,8 +16,9 @@ public class WebCrawler {
     private int successPages = 0;
     private boolean shouldSaveHitLinks;
     private boolean debug;
+    private boolean done = false;
 
-    private LinkedList<String> messages;
+    public LinkedList<String> messages;
 
     /**
      * creates a new WebCrawler object with standard values
@@ -79,6 +80,7 @@ public class WebCrawler {
      * @param searchWord the word to search for
      */
     public void search(String url, String searchWord) {
+//        System.out.println("searching for " + searchWord + " in " + url);
         int counter = 0;
         while (this.pagesVisited.size() < amountOfPages) {
             String curUrl;
@@ -90,6 +92,7 @@ public class WebCrawler {
                 curUrl = this.nextUrl();
                 counter++;
 //                print(String.format("visiting page %s / %s",counter,amountOfPages));
+                System.out.println(String.format("visiting page %s / %s", counter, amountOfPages));
                 addMessage(String.format("visiting page %s / %s", counter, amountOfPages));
             }
             branch.crawl(curUrl);
@@ -106,6 +109,7 @@ public class WebCrawler {
             }
             this.pagesPending.addAll(branch.getLinks());
         }
+        System.out.println("done searching");
 //        print("========================");
         addMessage("========================");
 //        print(String.format("DONE -- Visited %s webpages\nHits: %s\nAmount of pages with hits: %s\n", this.pagesVisited.size(), amountFound, successPages));
@@ -114,6 +118,7 @@ public class WebCrawler {
 //            print(String.format("Successful pages: \n%s", showCombinations(urlHits)));
             addMessage(String.format("Successful pages: \n%s", showCombinations(urlHits)));
         }
+        done = true;
     }
 
     private String display(List<String> list) {
@@ -176,15 +181,18 @@ public class WebCrawler {
         this.pagesVisited.clear();
         this.successPages = 0;
         this.amountFound = 0;
+        this.done = false;
     }
 
     private void print(String text) {
-        if (debug) logger.log(text);
+        if (debug) System.out.println(text);
     }
 
     public void addMessage(String message) {
-        this.messages.add(message);
-//        System.out.println(message);
+        if (!this.messages.contains(message)) {
+            this.messages.add(message);
+        }
+//        System.out.println("ADDED MESSAGE " + message);
     }
 
     public LinkedList<String> getMessages() {
@@ -193,5 +201,9 @@ public class WebCrawler {
 
     public void clearMessages() {
         this.messages.clear();
+    }
+
+    public boolean isDone() {
+        return done;
     }
 }

@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -36,6 +37,7 @@ public class Visualiser extends Application {
     private ResizableCanvas canvas;
     private ListView<String> log;
     private CrawlThread thread;
+    private WebCrawler crawler;
 
     private int lastLogSize = 0;
 
@@ -102,9 +104,13 @@ public class Visualiser extends Application {
         top.getChildren().add(content);
         Button button = new Button("Run");
         button.setOnAction(e -> {
-            log.getItems().clear();
-            thread = new CrawlThread(Integer.parseInt(amountField.getText()), true, urlField.getText(), wordField.getText(), this);
+//            log.getItems().clear();
+            thread = new CrawlThread(Integer.parseInt(amountField.getText()), true, parseUrl(urlField.getText()), wordField.getText(), this);
             thread.start();
+            this.crawler = thread.getCrawler();
+            System.out.println(crawler);
+            ObservableList<String> crawlerMessages = FXCollections.observableList(crawler.messages);
+            this.log.setItems(crawlerMessages);
         });
 
         top.getChildren().add(button);
@@ -114,6 +120,17 @@ public class Visualiser extends Application {
         top.getChildren().add(log);
 
 
+    }
+
+    private String parseUrl(String text) {
+        if (!text.startsWith("http://")) {
+            text = "http://" + text;
+        }
+        if (text.startsWith("https")) {
+            text = text.replace("https", "http");
+        }
+        System.out.println("parsed to " + text);
+        return text;
     }
 
     private void makeNumeric(TextField textField) {
@@ -149,24 +166,33 @@ public class Visualiser extends Application {
             updateFrame();
             this.frameTime = 0d;
         }
-
-        if (thread != null && thread.isAlive()) {
-            WebCrawler crawler = thread.getCrawler();
-            if (crawler != null) {
-                List<String> msgs = crawler.getMessages();
-                if (msgs != null)
-                    if (!msgs.isEmpty()) {
-                        log.getItems().addAll(msgs);
-                        thread.getCrawler().clearMessages();
-                        if (log.getItems().size() > lastLogSize) {
-                            if (!log.getItems().isEmpty())
-                                log.scrollTo(log.getItems().size() - 1);
-                            lastLogSize = log.getItems().size();
-                        }
-                    }
-            }
-
+        if (this.log.getItems().isEmpty()) {
+            this.log.getItems().add("test");
         }
+        this.log.refresh();
+
+//        if (thread != null && thread.isAlive()) {
+//            if (crawler == null) {
+//                crawler = thread.getCrawler();
+//            }
+//            if (crawler != null) {
+//                if (!this.crawler.isDone()) {
+//
+//                    List<String> msgs = new ArrayList<>(crawler.getMessages());
+//                    System.out.println(msgs);
+////                if (!msgs.isEmpty()) {
+////                    System.out.println("adding messages:\n" + msgs);
+//                    log.getItems().addAll(msgs);
+//                    thread.getCrawler().clearMessages();
+        if (!log.getItems().isEmpty())
+            log.scrollTo(log.getItems().size() - 1);
+////                    lastLogSize = log.getItems().size();
+//
+////                }
+//                }
+//            }
+//
+//        }
     }
 
     public void log(String item) {

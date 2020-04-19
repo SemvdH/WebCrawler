@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        //TODO add status text
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Enter a starting URL : ");
 //        String startUrl = scanner.nextLine().trim();
